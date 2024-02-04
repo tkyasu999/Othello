@@ -218,16 +218,16 @@ if __name__ == "__main__":
         print("player: " + player_name)
         print("put to: " + str(possible))
 
-        print(game.input_board())
+        print("input_board=" + game.input_board())
         if(player_name == "BLACK"):
-            user_input = subprocess.run(["othello_cpu1.exe", "-b", game.input_board()], capture_output=True, text=True)
+            user_input = subprocess.run(["othello_cpu_black.exe", "-b", game.input_board()], capture_output=True, text=True)
         else:
-            user_input = subprocess.run(["othello_cpu2.exe", "-w", game.input_board()], capture_output=True, text=True)
+            user_input = subprocess.run(["othello_cpu_white.exe", "-w", game.input_board()], capture_output=True, text=True)
 
-        print(user_input.stdout)
-        if user_input.stdout not in "pass":
+        print("stdout=" + user_input.stdout)
+        if user_input.stdout != "pass\n":
             my_tuple = tuple(map(int, user_input.stdout.split(",")))
             index = possible.index(my_tuple)
             game.put_disk(*possible[index])
 
-        time.sleep(1)
+        time.sleep(2)

@@ -38,3 +38,6 @@ Displays and controls the Othello board, determines the winner, and also execute
     - the coordinates where you want to place the stone in xy, separated by ','.
 - output
     - This is the data row of the current Othello board.
+
+## Reference
+1. https://katoh4u.hatenablog.com/entry/2018/03/22/130105

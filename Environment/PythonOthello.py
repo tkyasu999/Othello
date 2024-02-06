@@ -1,9 +1,20 @@
 import subprocess
 import time
+import tkinter
+import tkinter.messagebox
+import threading
 
 WHITE = 0
 BLACK = 1
 BOARD_SIZE = 8
+
+CANVAS_SIZE = 400
+BOARD_COLOR = 'green'
+YOUR_COLOR = 'black'
+COM_COLOR = 'white'
+
+YOU = 1
+COM = 2
 
 class ReversiBoard(object):
     def __init__(self):
@@ -78,7 +89,6 @@ class ReversiBoard(object):
         return flippable
 
     def show_board(self):
-        """ボードを表示する"""
         print("--" * 20)
         for i in self.cells:
             for cell in i:
@@ -196,9 +206,107 @@ class Game(ReversiBoard):
 
     def on_draw(self):
         return self.DRAW
+
+class BoardUI(ReversiBoard):
+    def __init__(self, master):
+        super().__init__()
+        self.master = master
+        self.color = {
+            YOU: YOUR_COLOR,
+            COM: COM_COLOR
+        }
+        self.createWidgets()
+        self.initOthello()
+
+    def createWidgets(self):
+        self.canvas = tkinter.Canvas(
+            self.master,
+            bg=BOARD_COLOR,
+            width=CANVAS_SIZE+1,
+            height=CANVAS_SIZE+1,
+            highlightthickness=0
+        )
+        self.canvas.pack(padx=10, pady=10)
+
+    def initOthello(self):
+        self.square_size = CANVAS_SIZE // BOARD_SIZE
+
+        for y in range(BOARD_SIZE):
+            for x in range(BOARD_SIZE):
+                xs = x * self.square_size
+                ys = y * self.square_size
+                xe = (x + 1) * self.square_size
+                ye = (y + 1) * self.square_size
+
+                tag_name = 'square_' + str(x) + '_' + str(y)
+                self.canvas.create_rectangle(
+                    xs, ys,
+                    xe, ye,
+                    tag=tag_name
+                )
+        
+        self.update(self.input_board())
+ 
+    def drawDisk(self, x, y, color):
+        center_x = (x + 0.5) * self.square_size
+        center_y = (y + 0.5) * self.square_size
+
+        xs = center_x - (self.square_size * 0.8) // 2
+        ys = center_y - (self.square_size * 0.8) // 2
+        xe = center_x + (self.square_size * 0.8) // 2
+        ye = center_y + (self.square_size * 0.8) // 2
+
+        tag_name = 'disk_' + str(x) + '_' + str(y)
+        self.canvas.create_oval(
+            xs, ys,
+            xe, ye,
+            fill=color,
+            tag=tag_name
+        )
     
+    def update(self, cells):
+        for y in range(BOARD_SIZE):
+            for x in range(BOARD_SIZE):
+                if int(cells[y*BOARD_SIZE+x]) == 2:
+                    self.drawDisk(x, y, self.color[COM])
+                elif int(cells[y*BOARD_SIZE+x]) == 1:
+                    self.drawDisk(x, y, self.color[YOU])
+        self.canvas.update()
+
+class GUI():
+    def __init__(self, objTk, bui, game):
+        self.objTk = objTk
+        self.bui = bui
+        self.game = game
+        self.buftime = time.time()
+        self.timeEvent()
+
+    def timeEvent(self):
+        tmp = time.time()
+        if(tmp - self.buftime) >= 1:
+            data = self.game.input_board()
+            th = threading.Thread(target=self.update, args=(data,))
+            th.start()
+            self.buftime = tmp
+        self.objTk.after(1, self.timeEvent)
+
+    def update(self, data):
+        self.bui.update(data)
+        self.objTk.update()
+
+def startTk(game):
+    objTk = tkinter.Tk()
+    bui = BoardUI(objTk)
+    objTk.title("othello")
+    GUI(objTk, bui, game)
+    objTk.mainloop()
+
 if __name__ == "__main__":
     game = Game()
+
+    thd = threading.Thread(target=startTk, args=(game,))
+    thd.start()
+    
     while(True):
         possible = game.list_possible_cells()
         player_name = game.get_color(game.get_current_player())
@@ -230,4 +338,4 @@ if __name__ == "__main__":
             index = possible.index(my_tuple)
             game.put_disk(*possible[index])
 
-        time.sleep(2)
+        time.sleep(1)

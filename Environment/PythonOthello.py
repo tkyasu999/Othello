@@ -165,6 +165,11 @@ class Game(ReversiBoard):
             self.turn += 1
         else:
             return False
+        
+    def next_disk(self):
+        self.was_passed = False
+        self.player = self.get_next_player()
+        self.turn += 1
 
     def pass_moving(self):
         if self.was_passed:
@@ -337,5 +342,7 @@ if __name__ == "__main__":
             my_tuple = tuple(map(int, user_input.stdout.split(",")))
             index = possible.index(my_tuple)
             game.put_disk(*possible[index])
+        else:
+            game.next_disk()
 
         time.sleep(1)

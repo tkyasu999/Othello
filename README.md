@@ -39,5 +39,32 @@ Displays and controls the Othello board, determines the winner, and also execute
 - output
     - This is the data row of the current Othello board.
 
+## Build
+
+- Run the command below
+
+```
+pyinstaller PythonOthello.py --noconsole --onefile --clean
+```
+
+## Install multiple libraries for unit tests
+
+```
+pip install pytest
+pip install pytest-mock
+pip install pytest-cov
+```
+
+## Run unit tests
+
+```
+pytest -v --cov=. test_PythonOthello.py
+```
+
+## Coverage Memo
+- Stmts: 実行対象コード全体の行数
+- Miss: 網羅できなかった行数
+- Cover: カバレッジ率
+
 ## Reference
 1. https://katoh4u.hatenablog.com/entry/2018/03/22/130105

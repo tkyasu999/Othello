@@ -134,6 +134,7 @@ class Game(ReversiBoard):
         self.turn = turn
         self.winner = None
         self.was_passed = False
+        self.disks = {}
 
     def is_finished(self):
         return self.winner is not None

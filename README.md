@@ -58,7 +58,7 @@ pip install pytest-cov
 ## Run unit tests
 
 ```
-pytest -v --cov=. test_PythonOthello.py
+pytest -v --cov=. --cov-report=term-missing test_PythonOthello.py
 ```
 
 ## Coverage Memo

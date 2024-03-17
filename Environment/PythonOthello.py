@@ -224,7 +224,7 @@ class BoardUI(ReversiBoard):
         self.createWidgets()
         self.initOthello()
 
-    def createWidgets(self):
+    def createWidgets(self): # pragma: no cover
         self.canvas = tkinter.Canvas(
             self.master,
             bg=BOARD_COLOR,
@@ -234,17 +234,32 @@ class BoardUI(ReversiBoard):
         )
         self.canvas.pack(padx=10, pady=10)
 
-    def initOthello(self):
+    def getInitXS(self, x, square_size):
+        return x * square_size
+
+    def getInitYS(self, y, square_size):
+        return y * square_size
+
+    def getInitXE(self, x, square_size):
+        return (x + 1) * square_size
+
+    def getInitYE(self, y, square_size):
+        return (y + 1) * square_size
+    
+    def getInitTag(self, x, y):
+        return 'square_' + str(x) + '_' + str(y)
+
+    def initOthello(self): # pragma: no cover
         self.square_size = CANVAS_SIZE // BOARD_SIZE
 
         for y in range(BOARD_SIZE):
             for x in range(BOARD_SIZE):
-                xs = x * self.square_size
-                ys = y * self.square_size
-                xe = (x + 1) * self.square_size
-                ye = (y + 1) * self.square_size
+                xs = self.getInitXS(x, self.square_size)
+                ys = self.getInitYS(y, self.square_size)
+                xe = self.getInitXE(x, self.square_size)
+                ye = self.getInitYE(y, self.square_size)
 
-                tag_name = 'square_' + str(x) + '_' + str(y)
+                tag_name = self.getInitTag(x, y)
                 self.canvas.create_rectangle(
                     xs, ys,
                     xe, ye,
@@ -253,16 +268,37 @@ class BoardUI(ReversiBoard):
         
         self.update(self.input_board())
  
+    def getOvalCenterX(self, x):
+        return (x + 0.5) * self.square_size
+
+    def getOvalCenterY(self, y):
+        return (y + 0.5) * self.square_size
+
+    def getOvalXS(self, center_x):
+        return center_x - (self.square_size * 0.8) // 2
+
+    def getOvalYS(self, center_y):
+        return center_y - (self.square_size * 0.8) // 2
+
+    def getOvalXE(self, center_x):
+        return center_x + (self.square_size * 0.8) // 2
+
+    def getOvalYE(self, center_y):
+        return center_y + (self.square_size * 0.8) // 2
+    
+    def getOvalTag(self, x, y):
+        return 'disk_' + str(x) + '_' + str(y)
+
     def drawDisk(self, x, y, color):
-        center_x = (x + 0.5) * self.square_size
-        center_y = (y + 0.5) * self.square_size
+        center_x = self.getOvalCenterX(x)
+        center_y = self.getOvalCenterY(y)
 
-        xs = center_x - (self.square_size * 0.8) // 2
-        ys = center_y - (self.square_size * 0.8) // 2
-        xe = center_x + (self.square_size * 0.8) // 2
-        ye = center_y + (self.square_size * 0.8) // 2
+        xs = self.getOvalXS(center_x)
+        ys = self.getOvalYS(center_y)
+        xe = self.getOvalXE(center_x)
+        ye = self.getOvalYE(center_y)
 
-        tag_name = 'disk_' + str(x) + '_' + str(y)
+        tag_name = self.getOvalTag(x, y)
         self.canvas.create_oval(
             xs, ys,
             xe, ye,
@@ -280,7 +316,7 @@ class BoardUI(ReversiBoard):
         self.canvas.update()
 
 class GUI():
-    def __init__(self, objTk, bui, game):
+    def __init__(self, objTk, bui, game): # pragma: no cover
         self.objTk = objTk
         self.bui = bui
         self.game = game
@@ -296,11 +332,11 @@ class GUI():
             self.buftime = tmp
         self.objTk.after(1, self.timeEvent)
 
-    def update(self, data):
+    def update(self, data): # pragma: no cover
         self.bui.update(data)
         self.objTk.update()
 
-def startTk(game):
+def startTk(game): # pragma: no cover
     objTk = tkinter.Tk()
     bui = BoardUI(objTk)
     objTk.title("othello")

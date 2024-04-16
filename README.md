@@ -11,6 +11,8 @@ Program exercise to search for stone placement in C language.
 - othello_template.c
     - Template implementing input specifications. 
     - Under construction.
+- othello_template_starter.c
+    - A template that allows you to try out the implementation by changing just a few lines.
 
 ## Specification
 - input

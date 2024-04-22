@@ -135,6 +135,9 @@ class Game(ReversiBoard):
         self.winner = None
         self.was_passed = False
         self.disks = {}
+        self.pass_count = {}
+        self.pass_count[WHITE] = 0
+        self.pass_count[BLACK] = 0
 
     def is_finished(self):
         return self.winner is not None
@@ -212,6 +215,11 @@ class Game(ReversiBoard):
 
     def on_draw(self):
         return self.DRAW
+    
+    def count_pass(self):
+        self.pass_count[self.get_current_player()] += 1
+        if self.pass_count[self.get_current_player()] > 4:
+            self.finish_game()
 
 class BoardUI(ReversiBoard):
     def __init__(self, master):
@@ -348,7 +356,7 @@ if __name__ == "__main__":
 
     thd = threading.Thread(target=startTk, args=(game,))
     thd.start()
-    
+     
     while(True):
         possible = game.list_possible_cells()
         player_name = game.get_color(game.get_current_player())
@@ -376,10 +384,16 @@ if __name__ == "__main__":
 
         print("stdout=" + user_input.stdout)
         if user_input.stdout != "pass\n":
-            my_tuple = tuple(map(int, user_input.stdout.split(",")))
-            index = possible.index(my_tuple)
-            game.put_disk(*possible[index])
+            try:
+                my_tuple = tuple(map(int, user_input.stdout.split(",")))
+                index = possible.index(my_tuple)
+                game.put_disk(*possible[index])
+            except Exception as e:
+                print(e)
+                game.count_pass()
+                game.next_disk()
         else:
+            game.count_pass()
             game.next_disk()
 
         time.sleep(1)

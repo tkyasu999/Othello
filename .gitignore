@@ -22,3 +22,9 @@ rad.json
 TestResults.xml
 Cpu/*.exe
 Environment/*.exe
+Environment/__pycache__/*
+Environment/.pytest_cache/*
+Environment/build/*
+Environment/dist/*
+Environment/.coverage
+Environment/*.spec

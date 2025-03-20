@@ -17,7 +17,7 @@ int ctoi(char c) {
 	if (c >= '0' && c <= '9') {
 		return c - '0';
 	}
-	return 0;
+	return -1;
 }
 
 // 盤面を初期化する関数

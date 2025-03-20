@@ -13,6 +13,8 @@ Program exercise to search for stone placement in C language.
   - Weak due to random algorithm.
 - othello_cpu_smart.c
   - A program to determine the position with the highest number of flippable stones.
+- othello_cpu_smart_evaluation.c
+  - Determine the position to place a stone using an evaluation function.
 
 ## Specification
 

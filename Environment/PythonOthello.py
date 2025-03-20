@@ -3,6 +3,8 @@ import time
 import tkinter
 import tkinter.messagebox
 import threading
+import json
+import os
 
 WHITE = 0
 BLACK = 1
@@ -15,6 +17,20 @@ COM_COLOR = 'white'
 
 YOU = 1
 COM = 2
+
+CONFIG_FILE = "config.json"
+
+def load_window_position():
+    if os.path.exists(CONFIG_FILE):
+        with open(CONFIG_FILE, "r") as file:
+            config = json.load(file)
+            return config.get("window_position", "+100+100")
+    return "+100+100"
+
+def save_window_position(position):
+    config = {"window_position": position}
+    with open(CONFIG_FILE, "w") as file:
+        json.dump(config, file)
 
 class ReversiBoard(object):
     def __init__(self):
@@ -330,6 +346,7 @@ class GUI():
         self.game = game
         self.buftime = time.time()
         self.timeEvent()
+        self.objTk.protocol("WM_DELETE_WINDOW", self.on_closing)
 
     def timeEvent(self):
         tmp = time.time()
@@ -344,10 +361,16 @@ class GUI():
         self.bui.update(data)
         self.objTk.update()
 
+    def on_closing(self):
+        position = self.objTk.geometry()
+        save_window_position(position)
+        self.objTk.destroy()
+
 def startTk(game): # pragma: no cover
     objTk = tkinter.Tk()
     bui = BoardUI(objTk)
     objTk.title("othello")
+    objTk.geometry(load_window_position())  # ウィンドウの位置を設定
     GUI(objTk, bui, game)
     objTk.mainloop()
 

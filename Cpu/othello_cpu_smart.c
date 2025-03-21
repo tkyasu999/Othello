@@ -71,8 +71,7 @@ int isValidMove(int x, int y, COLOR board[SIZE][SIZE], COLOR myturn) {
         return 0; // 位置が盤面外または既に石がある場合は無効
     }
 
-    // 指定された位置に石を置けるかどうかを判定
-    return flipStones(x, y, myturn, board) > 0;
+    return 1;
 }
 
 // ひっくり返せる石の数が最も多い位置を選ぶCPUプレイヤー

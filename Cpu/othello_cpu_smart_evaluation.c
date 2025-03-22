@@ -99,7 +99,7 @@ int evaluatePosition(int x, int y) {
     return 1;
 }
 
-// ひっくり返せる石の数が最も多い位置を選ぶCPUプレイヤー
+// 「ひっくり返せる石の数が最も多い」と「評価関数」とを考慮した位置を選ぶCPUプレイヤー
 void cpuBestMove(COLOR board[SIZE][SIZE], COLOR myturn) {
     int bestX = -1, bestY = -1;
     int maxFlips = -100;

@@ -5,6 +5,7 @@
 
 #define SIZE (8)
 #define MAX_PATTERNS (100)
+#define MAX_LINE_LENGTH (100)
 
 // 石の色を表す列挙型
 typedef enum color {
@@ -178,31 +179,29 @@ void addPattern(const char* buf, int x, int y) {
     }
 }
 
-// 勝ちパターン（最初の5手）の追加
-void listPatterns() {
-    // 勝ちパターン（最初の5手）
-    addPattern("0000000000000000000000000011100000012000000000000000000000000000", 2, 2);
-    addPattern("0000000000000000002000000012100000011000000010000000000000000000", 1, 3);
-    addPattern("0000000000000000012000000212100000011000000010000000000000000000", 1, 1);
-    addPattern("1000000001000000021000000211100000011000000010000000000000000000", 5, 3);
-    addPattern("1000000001000000021000000122220010011000000010000000000000000000", 3, 5);
+// テキストファイルから勝ちパターンを読み込む関数
+void loadPatternsFromFile(const char* filename) {
+    FILE* file = fopen(filename, "r");
+    if (file == NULL) {
+        perror("Failed to open pattern file");
+        return;
+    }
 
-    addPattern("0000000000000000000000000011100000012000000000000000000000000000", 2, 2);
-    addPattern("0000000000000000002100000011100000012000000000000000000000000000", 4, 2);
-    addPattern("0000000000000000002220000011200000011100000000000000000000000000", 1, 3);
-    addPattern("0000000000001000002210000222100000011100000000000000000000000000", 5, 0);
-    addPattern("0000020000002000011110000212100000011100000000000000000000000000", 4, 5);
+    char line[MAX_LINE_LENGTH];
+    while (fgets(line, sizeof(line), file)) {
+        char buf[SIZE * SIZE + 1];
+        int x, y;
+        if (sscanf(line, "%64s %d %d", buf, &x, &y) == 3) {
+            addPattern(buf, x, y);
+        }
+    }
 
-    addPattern("0000000000000000000000000011100000012000000000000000000000000000", 2, 2);
-    addPattern("0000000000000000002000000012100000011100000000000000000000000000", 1, 3);
-    addPattern("0000000000000000002100000221100000011100000000000000000000000000", 5, 3);
-    addPattern("0000000000000000002110000222120000011100000000000000000000000000", 3, 1);
-    addPattern("0001000000010000002120000221120000011100000000000000000000000000", 2, 0);
+    fclose(file);
 }
 
 int main(int argc, char *argv[]) {
-    if (argc < 3) {
-        fprintf(stderr, "Usage: %s -b|-w <board>\n", argv[0]);
+    if (argc < 4) {
+        fprintf(stderr, "Usage: %s -b|-w <board> <pattern_file>\n", argv[0]);
         return EXIT_FAILURE;
     }
 
@@ -222,8 +221,8 @@ int main(int argc, char *argv[]) {
     // 盤面の初期化
     init(board, argv[2]);
 
-    // 勝ちパターンの追加
-    listPatterns();
+    // 勝ちパターンのファイルからの読み込み
+    loadPatternsFromFile(argv[3]);
 
     // CPUプレイヤーの手を選択
     cpuBestMove(board, myturn);

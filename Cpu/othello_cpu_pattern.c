@@ -123,7 +123,7 @@ int matchPattern(COLOR board[SIZE][SIZE], Pattern pattern) {
     return 1;
 }
 
-// ひっくり返せる石の数と位置の評価を考慮して最適な手を選ぶCPUプレイヤー
+// ひっくり返せる石の数と位置の評価、パターンマッチグを考慮して最適な手を選ぶCPUプレイヤー
 void cpuBestMove(COLOR board[SIZE][SIZE], COLOR myturn) {
     int bestX = -1, bestY = -1;
     int maxScore = -100;

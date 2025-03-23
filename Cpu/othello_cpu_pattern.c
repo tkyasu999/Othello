@@ -200,8 +200,8 @@ void loadPatternsFromFile(const char* filename) {
 }
 
 int main(int argc, char *argv[]) {
-    if (argc < 4) {
-        fprintf(stderr, "Usage: %s -b|-w <board> <pattern_file>\n", argv[0]);
+    if (argc < 3) {
+        fprintf(stderr, "Usage: %s -b|-w <board>\n", argv[0]);
         return EXIT_FAILURE;
     }
 
@@ -222,7 +222,7 @@ int main(int argc, char *argv[]) {
     init(board, argv[2]);
 
     // 勝ちパターンのファイルからの読み込み
-    loadPatternsFromFile(argv[3]);
+    loadPatternsFromFile("./pattern.txt");
 
     // CPUプレイヤーの手を選択
     cpuBestMove(board, myturn);

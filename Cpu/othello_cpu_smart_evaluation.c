@@ -108,11 +108,13 @@ void cpuBestMove(COLOR board[SIZE][SIZE], COLOR myturn) {
         for (int x = 0; x < SIZE; x++) {
             if (isValidMove(x, y, board, myturn)) {
                 int flips = flipStones(x, y, myturn, board);
-                int score = flips + evaluatePosition(x, y);
-                if (score > maxFlips) {
-                    maxFlips = score;
-                    bestX = x;
-                    bestY = y;
+                if (flips > 0) {
+                    int score = flips + evaluatePosition(x, y);
+                    if (score > maxFlips) {
+                        maxFlips = score;
+                        bestX = x;
+                        bestY = y;
+                    }
                 }
             }
         }

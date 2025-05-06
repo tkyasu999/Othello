@@ -191,7 +191,7 @@ void loadPatternsFromFile(const char* filename) {
     while (fgets(line, sizeof(line), file)) {
         char buf[SIZE * SIZE + 1];
         int x, y;
-        if (sscanf(line, "%64s %d %d", buf, &x, &y) == 3) {
+        if (sscanf(line, "%64s, %d, %d", buf, &x, &y) == 3) {
             addPattern(buf, x, y);
         }
     }
@@ -222,7 +222,7 @@ int main(int argc, char *argv[]) {
     init(board, argv[2]);
 
     // 勝ちパターンのファイルからの読み込み
-    loadPatternsFromFile("./pattern.txt");
+    loadPatternsFromFile("./patterns.txt");
 
     // CPUプレイヤーの手を選択
     cpuBestMove(board, myturn);
